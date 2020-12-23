@@ -59,6 +59,7 @@ const hashrate_regexes = [
 const bench_algos = [
   "rx/0",
   "rx/wow",
+  "rx/arq",
   "defyx",
   "cn/r",
   "cn-pico/trtl",
@@ -108,6 +109,9 @@ function bench_algo_deps(bench_algo, perf) {
      };
      case "rx/wow": return {
        "rx/wow":        perf,
+     };
+     case "rx/arq": return {
+       "rx/arq":        perf,
      };
      case "rx/0": return {
        "rx/0":          perf,
@@ -163,6 +167,7 @@ let c = {
     "cn-heavy/xhv":  0,
     "cn-pico/trtl":  0,
     "rx/wow":        0,
+    "rx/arq":        0,
     "defyx":         0,
     "argon2/chukwa": 0,
     "k12":           0,
