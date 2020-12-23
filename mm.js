@@ -71,6 +71,7 @@ const bench_algos = [
   "c29b",
   "panthera",
   "astrobwt",
+  "kawpow",
 ];
 
 // algo and their perf that can be derived from thier main algo perf
@@ -137,6 +138,9 @@ function bench_algo_deps(bench_algo, perf) {
      case "astrobwt": return {
        "astrobwt":      perf,
      };
+     case "kawpow": return {
+       "kawpow":        perf,
+     };
      default: return {};
    }
 }
@@ -167,6 +171,7 @@ let c = {
     "c29b":          0,
     "panthera":      0,
     "astrobwt":      0,
+    "kawpow":        0,
   },
   algo_min_time: 0,
   user: null,
