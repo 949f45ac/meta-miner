@@ -739,7 +739,7 @@ function do_miner_perf_runs(cb) {
         
         if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
           else if (json.method.startsWith("mining.")) {
-			  const response = JSON.stringify({ id: json.id, result: true, error: null });
+			  const response = JSON.stringify({ id: json.id, result: true });
 			  miner_socket.write(response);
 			  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
 		  }
@@ -986,7 +986,7 @@ function main() {
 
       if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
       else if (json.method.startsWith("mining.")) {
-		  const response = JSON.stringify({ id: json.id, result: true, error: null });
+		  const response = JSON.stringify({ id: json.id, result: true });
 		  miner_socket.write(response);
 		  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
 	  }
