@@ -997,7 +997,8 @@ function main() {
         miner_socket.write(grin_json_reply("getjobtemplate", curr_pool_last_job.result.job));
       } else {
         let curr_pool_last_job_id = curr_pool_last_job;
-        if ("id" in json) curr_pool_last_job_id.id = json.id;
+        const ethRpc = json.method && json.method.startsWith("mining.");
+        if ("id" in json && !ethRpc) curr_pool_last_job_id.id = json.id;
         if (is_verbose_mode) log("Sending first pool job:" + JSON.stringify(curr_pool_last_job_id));
         miner_socket.write(JSON.stringify(curr_pool_last_job_id) + "\n");
       }
