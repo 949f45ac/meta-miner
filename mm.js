@@ -620,6 +620,8 @@ function pool_new_msg(is_new_job, json) {
       if (is_verbose_mode) log("Sending job: " + JSON.stringify(json));
       curr_miner_socket.write(JSON.stringify(json) + "\n"); 
     }
+  } else {
+    if (is_verbose_mode) log("waiting for miner....");
   }
 }
 
@@ -1003,9 +1005,9 @@ function main() {
       } else {
         let curr_pool_last_job_id = curr_pool_last_job;
         const ethRpc = json.method && json.method.startsWith("mining.");
-        if ("id" in json && !ethRpc) curr_pool_last_job_id.id = json.id;
+        if ("id" in json) curr_pool_last_job_id.id = json.id;
 
-        const response = ethRpc ? JSON.stringify({ id: json.id, result: curr_pool_last_job_id.params, error: null, jsonrpc: "2.0" }) : JSON.stringify(curr_pool_last_job_id);
+        const response = JSON.stringify(curr_pool_last_job_id);
         if (is_verbose_mode) log("Sending first pool job: " + response);
         miner_socket.write(response + "\n");
       }
