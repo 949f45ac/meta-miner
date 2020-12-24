@@ -611,7 +611,7 @@ function pool_new_msg(is_new_job, json) {
         curr_miner_socket.write(JSON.stringify(grin_json) + "\n");
       }
     } else {
-      if (is_verbose_mode) log("Sending job: " JSON.stringify(json));
+      if (is_verbose_mode) log("Sending job: " + JSON.stringify(json));
       curr_miner_socket.write(JSON.stringify(json) + "\n"); 
     }
   }
@@ -985,6 +985,7 @@ function main() {
       } else {
         let curr_pool_last_job_id = curr_pool_last_job;
         if ("id" in json) curr_pool_last_job_id.id = json.id;
+        if (is_verbose_mode) log("Sending first pool job:" + JSON.stringify(curr_pool_last_job_id));
         miner_socket.write(JSON.stringify(curr_pool_last_job_id) + "\n");
       }
     } else {
