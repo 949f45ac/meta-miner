@@ -496,7 +496,7 @@ function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
       // different for first and subsequent XMR pool jobs
       const is_new_job = ("result" in json && (json.result instanceof Object) && "job" in json.result && (json.result.job instanceof Object)) ||
                          ("result" in json && (json.result instanceof Object) && "algo" in json.result) ||
-                         ("method" in json && json.method === "job" || json.method === "mining.notify" && "params" in json && (json.params instanceof Object));
+                         ("method" in json && (json.method === "job" || json.method === "mining.notify") && "params" in json && (json.params instanceof Object));
       if (is_new_job) {
         if (!is_pool_ok) { pool_ok_cb(pool_num, pool_socket); is_pool_ok = true; }
       }
@@ -569,6 +569,8 @@ function replace_miner(next_miner) {
 }
 
 function pool_new_msg(is_new_job, json) {
+  if (is_verbose_mode) log("Handling pool msg.");
+	
   if (is_new_job) {
     let next_algo = DEFAULT_ALGO;
 
@@ -577,6 +579,9 @@ function pool_new_msg(is_new_job, json) {
     else if ("result" in json && "algo" in json.result) next_algo = json.result.algo;
 
     const ethRpc = json.method && json.method.startsWith("mining.");
+
+    if (is_verbose_mode) log("new job = true, next algo = " + next_algo);
+	  
     if ("params" in json && !ethRpc) {
       if (curr_pool_last_job) {
         curr_pool_last_job.result.job = json.params;
