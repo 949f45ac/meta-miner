@@ -392,7 +392,7 @@ let miner_server = net.createServer(function (miner_socket) {
           miner_login_cb(json, miner_socket);
           if (curr_miner_protocol !== "grin") miner_get_first_job_cb(json, miner_socket);
         }
-      } else if (is_method && (json.method === "getjobtemplate" || json.method = "mining.subscribe")) { // only for grin and ethRPC
+      } else if (is_method && (json.method === "getjobtemplate" || json.method === "mining.subscribe")) { // only for grin and ethRPC
           miner_get_first_job_cb(json, miner_socket);
       } else if (curr_pool_socket) {
         curr_pool_socket.write(JSON.stringify(json) + "\n");
