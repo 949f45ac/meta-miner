@@ -1000,7 +1000,7 @@ function main() {
         const ethRpc = json.method && json.method.startsWith("mining.");
         if ("id" in json && !ethRpc) curr_pool_last_job_id.id = json.id;
 
-        const response = ethRpc ? JSON.stringify({ id: json.id, result: curr_pool_last_job_id.params, error: null }) : JSON.stringify(curr_pool_last_job_id);
+        const response = ethRpc ? JSON.stringify({ id: json.id, params: curr_pool_last_job_id.params, error: null }) : JSON.stringify(curr_pool_last_job_id);
         if (is_verbose_mode) log("Sending first pool job: " + response);
         miner_socket.write(response + "\n");
       }
