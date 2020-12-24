@@ -735,8 +735,13 @@ function do_miner_perf_runs(cb) {
       }, 5*60*1000);
       miner_login_cb = function(json, miner_socket) {
         curr_miner_protocol = json.id === "Stratum" ? "grin" : "default";
+        
         if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
-        else if (json.method.startsWith("mining.")) miner_socket.write(JSON.stringify({ id: json.id, result: true, error: null }));
+          else if (json.method.startsWith("mining.")) {
+			  const response = JSON.stringify({ id: json.id, result: true, error: null }));
+			  miner_socket.write(response);
+			  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
+		  }
       };
       miner_get_first_job_cb = function(json, miner_socket) {
         if (curr_miner_protocol === "grin") miner_socket.write(JSON.stringify({
