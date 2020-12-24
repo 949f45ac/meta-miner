@@ -1008,7 +1008,7 @@ function main() {
       } else {
         let curr_pool_last_job_id = curr_pool_last_job;
         const ethRpc = json.method && json.method.startsWith("mining.");
-        if ("id" in json) curr_pool_last_job_id.id = json.id;
+        if ("id" in json && !ethRpc) curr_pool_last_job_id.id = json.id;
 
         const response = JSON.stringify(curr_pool_last_job_id);
         if (is_verbose_mode) log("Sending first pool job: " + response);
