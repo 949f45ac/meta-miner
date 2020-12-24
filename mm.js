@@ -393,7 +393,7 @@ let miner_server = net.createServer(function (miner_socket) {
           if (curr_miner_protocol !== "grin") miner_get_first_job_cb(json, miner_socket);
         }
       } else if (is_method && json.method === "mining.subscribe") { // ETH Stratum or some shit
-          miner_socket.write(JSON.stringify({ id: json.id, result: json.params, jsonrpc: "2.0" }) + "\n");
+          miner_socket.write(JSON.stringify({ id: json.id, method: json.method, result: json.params, jsonrpc: "2.0" }) + "\n");
           miner_get_first_job_cb(json, miner_socket);
       } else if (is_method && json.method === "getjobtemplate" ) { // only for grin 
           miner_get_first_job_cb(json, miner_socket);
