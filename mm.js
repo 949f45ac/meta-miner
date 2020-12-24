@@ -576,7 +576,8 @@ function pool_new_msg(is_new_job, json) {
     else if ("result" in json && "job" in json.result && "algo" in json.result.job) next_algo = json.result.job.algo;
     else if ("result" in json && "algo" in json.result) next_algo = json.result.algo;
 
-    if ("params" in json) {
+    const ethRpc = json.method && json.method.startsWith("mining.");
+    if ("params" in json && !ethRpc) {
       if (curr_pool_last_job) {
         curr_pool_last_job.result.job = json.params;
       } else {
@@ -738,7 +739,7 @@ function do_miner_perf_runs(cb) {
         
         if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
           else if (json.method.startsWith("mining.")) {
-			  const response = JSON.stringify({ id: json.id, result: true, error: null }));
+			  const response = JSON.stringify({ id: json.id, result: true, error: null });
 			  miner_socket.write(response);
 			  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
 		  }
