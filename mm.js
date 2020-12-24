@@ -187,9 +187,9 @@ let c = {
 };
 
 let is_quiet_mode     = false;
-let is_verbose_mode   = false;
+let is_verbose_mode   = true;
 let is_no_config_save = false;
-let is_debug          = false;
+let is_debug          = true;
 let is_miner_stdin    = false;
 
 // *****************************************************************************
@@ -495,7 +495,8 @@ function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
       if (is_debug) log("Pool message: " + JSON.stringify(json));
       // different for first and subsequent XMR pool jobs
       const is_new_job = ("result" in json && (json.result instanceof Object) && "job" in json.result && (json.result.job instanceof Object)) ||
-                         ("method" in json && json.method === "job" && "params" in json && (json.params instanceof Object));
+                         ("result" in json && (json.result instanceof Object) && "algo" in json.result) ||
+                         ("method" in json && json.method === "job" || json.method === "mining.notify" && "params" in json && (json.params instanceof Object));
       if (is_new_job) {
         if (!is_pool_ok) { pool_ok_cb(pool_num, pool_socket); is_pool_ok = true; }
       }
@@ -573,6 +574,7 @@ function pool_new_msg(is_new_job, json) {
 
     if ("params" in json && "algo" in json.params) next_algo = json.params.algo;
     else if ("result" in json && "job" in json.result && "algo" in json.result.job) next_algo = json.result.job.algo;
+    else if ("result" in json && "algo" in json.result) next_algo = json.result.algo;
 
     if ("params" in json) {
       if (curr_pool_last_job) {
@@ -609,6 +611,7 @@ function pool_new_msg(is_new_job, json) {
         curr_miner_socket.write(JSON.stringify(grin_json) + "\n");
       }
     } else {
+      if (is_verbose_mode) log("Sending job: " JSON.stringify(json));
       curr_miner_socket.write(JSON.stringify(json) + "\n"); 
     }
   }
