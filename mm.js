@@ -385,7 +385,7 @@ let miner_server = net.createServer(function (miner_socket) {
       }
       if (is_debug) log("Miner message: " + JSON.stringify(json));
       const is_method = "method" in json;
-      if (is_method && json.method === "login") {
+      if (is_method && (json.method === "login" || json.method === "mining.authorize")) {
         if (curr_miner_socket) { // need to restart miner in case of second login attempt to clean its internal state
           replace_miner(curr_miner);
         } else {
@@ -396,7 +396,7 @@ let miner_server = net.createServer(function (miner_socket) {
           miner_get_first_job_cb(json, miner_socket);
       } else if (curr_pool_socket) {
         curr_pool_socket.write(JSON.stringify(json) + "\n");
-        if (is_method && json.method === "submit") miner_last_submit_time = Date.now();
+        if (is_method && (json.method === "submit" || json.method === "mining.submit")) miner_last_submit_time = Date.now();
       } else if (!(is_method && json.method === "keepalived")) {
         err("Can't write miner reply to the pool since its socket is closed");
       }
