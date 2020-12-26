@@ -395,7 +395,7 @@ let miner_server = net.createServer(function (miner_socket) {
       } else if (is_method && json.method === "mining.subscribe") { // ETH Stratum or some shit
           miner_socket.write(JSON.stringify({ id: json.id, result: [null, ""], error: null }) + "\n");
           miner_get_first_job_cb(json, miner_socket);
-      } else if (is_method && json.method === "getjobtemplate" ) { // only for grin 
+      } else if (is_method && json.method === "getjobtemplate" ) { // only for grin
           miner_get_first_job_cb(json, miner_socket);
       } else if (curr_pool_socket) {
         curr_pool_socket.write(JSON.stringify(json) + "\n");
@@ -456,7 +456,7 @@ function start_miner(cmd, out_cb) {
    let exe = args.shift();
    return start_miner_raw(exe, args, out_cb);
 }
- 
+
 // *** Pool socket processing
 
 function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
@@ -477,7 +477,7 @@ function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
     );
   });
 
-  let is_pool_ok = false; 
+  let is_pool_ok = false;
   let pool_data_buff = "";
 
   pool_socket.on('data', function (msg) {
@@ -507,7 +507,7 @@ function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
       else err("Ignoring pool (" + c.pools[pool_num] + ") message that does not contain job: " + JSON.stringify(json));
     }
     pool_data_buff = incomplete_line;
-    
+
   });
 
   pool_socket.on('end', function() {
@@ -524,7 +524,7 @@ function connect_pool(pool_num, pool_ok_cb, pool_new_msg_cb, pool_err_cb) {
     pool_err_cb(pool_num);
   });
 }
-           
+
 // *** connect_pool function callbacks
 
 function set_main_pool_check_timer() {
@@ -573,7 +573,7 @@ function replace_miner(next_miner) {
 
 function pool_new_msg(is_new_job, json) {
   if (is_verbose_mode) log("Handling pool msg.");
-	
+
   if (is_new_job) {
     let next_algo = DEFAULT_ALGO;
 
@@ -584,7 +584,7 @@ function pool_new_msg(is_new_job, json) {
     const ethRpc = json.method && json.method.startsWith("mining.");
 
     if (is_verbose_mode) log("new job = true, next algo = " + next_algo);
-	  
+
     if ("params" in json && !ethRpc) {
       if (curr_pool_last_job) {
         curr_pool_last_job.result.job = json.params;
@@ -621,7 +621,7 @@ function pool_new_msg(is_new_job, json) {
       }
     } else {
       if (is_verbose_mode) log("Sending job: " + JSON.stringify(json));
-      curr_miner_socket.write(JSON.stringify(json) + "\n"); 
+      curr_miner_socket.write(JSON.stringify(json) + "\n");
     }
   } else {
     if (is_verbose_mode) log("waiting for miner....");
@@ -746,13 +746,13 @@ function do_miner_perf_runs(cb) {
       }, 5*60*1000);
       miner_login_cb = function(json, miner_socket) {
         curr_miner_protocol = json.id === "Stratum" ? "grin" : "default";
-        
+
         if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
           else if (json.method.startsWith("mining.")) {
-			  const response = JSON.stringify({ id: json.id, result: true });
-			  miner_socket.write(response);
-			  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
-		  }
+              const response = JSON.stringify({ id: json.id, result: true });
+              miner_socket.write(response);
+              if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
+          }
       };
       miner_get_first_job_cb = function(json, miner_socket) {
         if (curr_miner_protocol === "grin") miner_socket.write(JSON.stringify({
@@ -812,7 +812,7 @@ function do_miner_perf_runs(cb) {
               tree_kill(miner_proc.pid);
               break;
             } else {
-              log("Read performance for " + algo + " algo to " + hashrate + ", waiting for " + 
+              log("Read performance for " + algo + " algo to " + hashrate + ", waiting for " +
                      (nr_prints_needed - nr_prints_found) + " more print(s).");
             }
           }
@@ -996,10 +996,10 @@ function main() {
 
       if (curr_miner_protocol === "grin") miner_socket.write(grin_json_reply("login", "ok"));
       else if (json.method.startsWith("mining.")) {
-		  const response = JSON.stringify({ id: json.id, result: true });
-		  miner_socket.write(response + "\n");
-		  if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
-	  }
+          const response = JSON.stringify({ id: json.id, result: true });
+          miner_socket.write(response + "\n");
+          if (is_verbose_mode) log("sending ETH-rpc login response:" + response);
+      }
   };
   miner_get_first_job_cb = function(json, miner_socket) {
     if (curr_pool_last_job) {
