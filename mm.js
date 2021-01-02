@@ -1014,6 +1014,7 @@ function main() {
         if (is_verbose_mode) log("Sending first pool job: " + response);
         miner_socket.write(response + "\n");
       }
+      curr_pool_last_job = null;
     } else {
       err("No pool (" + c.pools[curr_pool_num] + ") job to send to the miner!");
     }
