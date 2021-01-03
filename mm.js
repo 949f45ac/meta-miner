@@ -214,6 +214,8 @@ let miner_login_cb         = null;
 let miner_get_first_job_cb = null;
 let miner_last_submit_time = null;
 
+let outdated = false;
+
 // *****************************************************************************
 // *** FUNCTIONS                                                             ***
 // *****************************************************************************
@@ -573,6 +575,8 @@ function replace_miner(next_miner) {
 
 function pool_new_msg(is_new_job, json) {
   if (is_verbose_mode) log("Handling pool msg.");
+
+  outdated = false;
 
   if (is_new_job) {
     let next_algo = DEFAULT_ALGO;
@@ -1002,7 +1006,7 @@ function main() {
     }
   };
   miner_get_first_job_cb = function(json, miner_socket) {
-    if (curr_pool_last_job) {
+    if (curr_pool_last_job && !outdated) {
       if (curr_miner_protocol === "grin") {
         miner_socket.write(grin_json_reply("getjobtemplate", curr_pool_last_job.result.job));
       } else {
@@ -1014,7 +1018,7 @@ function main() {
         if (is_verbose_mode) log("Sending first pool job: " + response);
         miner_socket.write(response + "\n");
       }
-      curr_pool_last_job = null;
+      outdated = true;
     } else {
       err("No pool (" + c.pools[curr_pool_num] + ") job to send to the miner!");
     }
