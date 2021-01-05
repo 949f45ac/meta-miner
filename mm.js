@@ -576,9 +576,9 @@ function replace_miner(next_miner) {
 function pool_new_msg(is_new_job, json) {
   if (is_verbose_mode) log("Handling pool msg.");
 
-  outdated = false;
-
   if (is_new_job) {
+    outdated = false;
+
     let next_algo = DEFAULT_ALGO;
 
     if ("params" in json && "algo" in json.params) next_algo = json.params.algo;
