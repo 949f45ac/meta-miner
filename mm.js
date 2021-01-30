@@ -584,6 +584,7 @@ function pool_new_msg(is_new_job, json) {
     if ("params" in json && "algo" in json.params) next_algo = json.params.algo;
     else if ("result" in json && "job" in json.result && "algo" in json.result.job) next_algo = json.result.job.algo;
     else if ("result" in json && "algo" in json.result) next_algo = json.result.algo;
+    else if ("algo" in json) next_algo = json.algo;
 
     const ethRpc = json.method && json.method.startsWith("mining.");
 
